@@ -1,7 +1,7 @@
 import re
 from decimal import Decimal
 
-c = r'(?:\d+(?:\.\d+)*)'
+c = r'(?:-?\d+(?:\.\d+)*)'
 
 def num(x):
     return float(x) if '.' in x else int(x)
@@ -17,6 +17,9 @@ def norm(x):
 
 def schet(x):
     x = norm(x)
+    if x.startswith('-'):
+        x = '0' + x
+    x = x.replace('(-', '(0-')
     while m := re.search(rf"({c})([*/])({c})", x):
         a, b = num(m[1]), num(m[3])
         v = a * b if m[2] == "*" else a / b
